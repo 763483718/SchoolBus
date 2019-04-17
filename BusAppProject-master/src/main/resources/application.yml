@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/SchoolBus?useSSL=false
+    username: root
+    password: c3611230
+  mybatis:
+    type-aliases-package: com.example.springbootdemo.bean
+server:
+    port: 8999
