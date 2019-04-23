@@ -33,7 +33,8 @@ unsigned long  Time_Cont2 = 0;       //定时器计数器
 const unsigned int gprsRxBufferLength = 600;
 char gprsRxBuffer[gprsRxBufferLength];
 unsigned int gprsBufferCount = 0;
-char OneNetServer[] = "api.heclouds.com";       //不需要修改
+char OneNetServer[] = "127.0.0.1";       //不需要修改
+char serviceIP[] = "127.0.0.1";
 
 
 char device_id[] = "3225187";    //修改为自己的设备ID
@@ -153,7 +154,8 @@ void printGpsBuffer()
 			DebugSerial.print("Save_Data.E_W = ");
 			DebugSerial.println(Save_Data.E_W);
 
-			postGpsDataToOneNet(API_KEY, device_id, sensor_gps, Save_Data.longitude, Save_Data.latitude);
+			// postGpsDataToOneNet(API_KEY, device_id, sensor_gps, Save_Data.longitude, Save_Data.latitude);
+			postGpsDataToService("getWorkingDriver",Save_Data.longitude,Save_Data.latitude);
 		}
 		else
 		{
@@ -293,6 +295,64 @@ double latitudeToOnenetFormat(char *lat_str_temp)
 
 
 	return lat_Onenet_double;
+}
+
+void postGpsDataToService(char* function, char* lon_temp, char* lat_temp)
+{
+	char send_buf[400] = {0};
+	char text[100] = {0};
+	char tmp[25] = {0};
+
+	char lon_str_end[15] = {0};
+	char lat_str_end[15] = {0};
+
+	dtostrf(longitudeToOnenetFormat(lon_temp), 3, 6, lon_str_end); //转换成字符串输出
+	dtostrf(latitudeToOnenetFormat(lat_temp), 2, 6, lat_str_end); //转换成字符串输出
+
+	//连接服务器
+	memset(send_buf, 0, 400);    //清空
+	strcpy(send_buf, "AT+CIPSTART=\"TCP\",\"");
+	strcat(send_buf, serviceIP);
+	strcat(send_buf, "\",8999\r\n");
+	if (sendCommand(send_buf, "CONNECT", 10000, 5) == Success);//"CONNECT"表明链接服务器成功
+	else errorLog(7);
+
+	//发送数据
+	if (sendCommand("AT+CIPSEND\r\n", ">", 3000, 1) == Success);
+	else errorLog(8);
+
+	memset(send_buf, 0, 400);    //清空
+
+	/*准备JSON串*/
+	//ARDUINO平台不支持sprintf的double的打印，只能转换到字符串然后打印
+	sprintf(text, "lat=%s&lng=%s",lat_str_end,lon_str_end);
+
+	/*准备HTTP报头*/
+	send_buf[0] = 0;
+	strcat(send_buf, "POST /api/");
+	strcat(send_buf, function);
+	strcat(send_buf, " HTTP/1.1\r\n"); //注意后面必须加上\r\n
+	strcat(send_buf, "Host:");
+	strcat(send_buf, serviceIP);
+	strcat(send_buf, "\r\n");
+	strcat(send_buf, "Content-Type: application/x-www-form-urlencoded\r\n");
+	sprintf(tmp, "Content-Length:%d\r\n\r\n", strlen(text)); //计算JSON串长度
+	strcat(send_buf, tmp);
+	strcat(send_buf, text);
+
+	if (sendCommand(send_buf, send_buf, 3000, 1) == Success);
+	else errorLog(9);
+
+	char sendCom[2] = {0x1A};
+	if (sendCommand(sendCom, "\"succ\"}", 3000, 1) == Success);
+	else errorLog(10);
+
+	if (sendCommand("AT+CIPCLOSE\r\n", "CLOSE OK\r\n", 3000, 1) == Success);
+	else errorLog(11);
+
+	if (sendCommand("AT+CIPSHUT\r\n", "SHUT OK\r\n", 3000, 1) == Success);
+	else errorLog(11);
+
 }
 
 
