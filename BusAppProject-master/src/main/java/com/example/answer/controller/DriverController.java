@@ -96,16 +96,16 @@ public class DriverController {
         return ResponseEntity.ok(r);
     }
 
-
+///////////////////////////////////////////这里！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
     @ApiOperation(value = "校车自动定位", notes = "校车自动定位", response = JsonResult.class)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "lat", value = "经度", required = true, dataType = "String", paramType = "query"),
             @ApiImplicitParam(name = "lng", value = "纬度", required = true, dataType = "String", paramType = "query")
     })
-    @RequestMapping(value = "setPostion", method = RequestMethod.POST)
-    public ResponseEntity<JsonStatus> setPostion(
-            @RequestParam(value = "lat", required = true) int lat,
-            @RequestParam(value = "lng", required = true) int lng
+    @RequestMapping(value = "setPosition", method = RequestMethod.POST)
+    public ResponseEntity<JsonStatus> setPosition(
+            @RequestParam(value = "lat", required = true) String lat,
+            @RequestParam(value = "lng", required = true) String lng
     )throws ServletException{
         JsonResult r = new JsonResult();
         try{
@@ -115,8 +115,6 @@ public class DriverController {
         }catch (Exception e){
 
         }
-
-
         return ResponseEntity.ok(r);
     }
 
