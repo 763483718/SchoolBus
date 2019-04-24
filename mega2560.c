@@ -155,7 +155,7 @@ void printGpsBuffer()
 			DebugSerial.println(Save_Data.E_W);
 
 			// postGpsDataToOneNet(API_KEY, device_id, sensor_gps, Save_Data.longitude, Save_Data.latitude);
-			postGpsDataToService("getWorkingDriver",Save_Data.longitude,Save_Data.latitude);
+			postGpsDataToService("getPosition",Save_Data.longitude,Save_Data.latitude);
 		}
 		else
 		{
@@ -344,7 +344,7 @@ void postGpsDataToService(char* function, char* lon_temp, char* lat_temp)
 	else errorLog(9);
 
 	char sendCom[2] = {0x1A};
-	if (sendCommand(sendCom, "\"succ\"}", 3000, 1) == Success);
+	if (sendCommand(sendCom, "SEND OK", 3000, 1) == Success);//\"succ\"}
 	else errorLog(10);
 
 	if (sendCommand("AT+CIPCLOSE\r\n", "CLOSE OK\r\n", 3000, 1) == Success);
