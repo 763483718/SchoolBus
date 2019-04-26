@@ -156,7 +156,7 @@ public class LoginController {
                     }
                     r.setResult(lr);
                     r.setMsg("登陆成功");
-                    r.setStatus("200");
+                    r.setStatus("0");
                 } else {
                     r.setResult("密码不正确");
                     r.setStatus("400");
