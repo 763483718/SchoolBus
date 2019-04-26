@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 @RequestMapping("/api")
 @RestController
@@ -51,22 +52,26 @@ public class PassengerController {
         return ResponseEntity.ok(r);
     }
 
+//    @ApiOperation(value = "获取校车当前位置")
+//    @ApiImplicitParams(
+//            @ApiImplicitParam(name = "busID", required = true, dataType = "String", paramType = "path")
+//    )
+//    @ApiResponse(code = 200, message = "请求成功", response = JsonResult.class)
+//    @RequestMapping(value = "getBusPosition", method = RequestMethod.GET)
+//    public ResponseEntity<JsonStatus> getBusPosition(@RequestParam(value = "busID", required = true) String busID,
+//                                                     HttpServletRequest request,
+//                                                     HttpServletResponse response)throws ServletException{
     @ApiOperation(value = "获取校车当前位置")
-    @ApiImplicitParams(
-            @ApiImplicitParam(name = "busID", required = true, dataType = "String", paramType = "path")
-    )
     @ApiResponse(code = 200, message = "请求成功", response = JsonResult.class)
     @RequestMapping(value = "getBusPosition", method = RequestMethod.GET)
-    public ResponseEntity<JsonStatus> getBusPosition(@RequestParam(value = "busID", required = true) String busID,
-                                                     HttpServletRequest request,
+    public ResponseEntity<JsonStatus> getBusPosition(HttpServletRequest request,
                                                      HttpServletResponse response)throws ServletException{
         JsonResult r = new JsonResult();
         try{
-            System.out.println(busID);
-            int busID_int = Integer.parseInt(busID);
-            BusDTO busDTO = passengerService.getBusPosition(busID_int);
-            if(busDTO!=null){
-                r.setResult(busDTO);
+//            BusDTO busDTO = passengerService.getBusPosition(busID_int);
+            List<BusDTO> busDTOList = passengerService.getBusPositionList();
+            if(busDTOList!=null){
+                r.setResult(busDTOList);
                 r.setMsg("获取成功");
                 r.setStatus("0");
 

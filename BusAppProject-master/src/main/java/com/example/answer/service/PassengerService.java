@@ -13,4 +13,6 @@ public interface PassengerService {
 
     //获取校车位置
     public BusDTO getBusPosition(int busID);
+
+    public List<BusDTO> getBusPositionList();
 }

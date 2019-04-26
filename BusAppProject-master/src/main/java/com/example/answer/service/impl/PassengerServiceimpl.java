@@ -53,7 +53,17 @@ public class PassengerServiceimpl implements PassengerService {
         }
         return bwdList;
     }
+    public List<BusDTO> getBusPositionList(){
+        List<BusDTO> busDTOList = new ArrayList<>();
 
+        for(int i = 1;i <= 1; i++){
+            BusDTO busDTO = passengerMapper.getBusPositionById(i);
+            if(busDTO!=null){
+                busDTOList.add(busDTO);
+            }
+        }
+        return busDTOList;
+    }
 
     public BusDTO getBusPosition(int busID){
         BusDTO busDTO = passengerMapper.getBusPositionById(busID);
