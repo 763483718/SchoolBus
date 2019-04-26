@@ -2,6 +2,7 @@ package com.example.answer.controller;
 
 import com.example.answer.bean.JsonResult;
 import com.example.answer.bean.JsonStatus;
+import com.example.answer.dto.BusDTO;
 import com.example.answer.service.PassengerService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -50,6 +51,35 @@ public class PassengerController {
         return ResponseEntity.ok(r);
     }
 
-    // 获取校车线路信息
+    @ApiOperation(value = "获取校车当前位置")
+    @ApiImplicitParams(
+            @ApiImplicitParam(name = "busID", required = true, dataType = "String", paramType = "path")
+    )
+    @ApiResponse(code = 200, message = "请求成功", response = JsonResult.class)
+    @RequestMapping(value = "getBusPosition", method = RequestMethod.GET)
+    public ResponseEntity<JsonStatus> getBusPosition(@RequestParam(value = "busID", required = true) String busID,
+                                                     HttpServletRequest request,
+                                                     HttpServletResponse response)throws ServletException{
+        JsonResult r = new JsonResult();
+        try{
+            System.out.println(busID);
+            int busID_int = Integer.parseInt(busID);
+            BusDTO busDTO = passengerService.getBusPosition(busID_int);
+            if(busDTO!=null){
+                r.setResult(busDTO);
+                r.setMsg("获取成功");
+                r.setStatus("0");
+
+            }else{
+                r.setMsg("请输出正确的校车id");
+                r.setStatus("-1000");
+            }
+
+        }catch (Exception e){
+            r.setMsg("请输入正确的格式");
+            r.setStatus("-1000");
+        }
+        return ResponseEntity.ok(r);
+    }
 
 }

@@ -1,10 +1,10 @@
 package com.example.answer.service.impl;
 
+import com.example.answer.dto.BusDTO;
 import com.example.answer.dto.BusWorkingDTO;
 import com.example.answer.dto.CodeDTO;
 import com.example.answer.mapper.PassengerMapper;
 import com.example.answer.service.PassengerService;
-import com.example.answer.util.CommonUtils;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,5 +52,11 @@ public class PassengerServiceimpl implements PassengerService {
 
         }
         return bwdList;
+    }
+
+
+    public BusDTO getBusPosition(int busID){
+        BusDTO busDTO = passengerMapper.getBusPositionById(busID);
+        return busDTO;
     }
 }

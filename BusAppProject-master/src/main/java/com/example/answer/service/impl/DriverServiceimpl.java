@@ -56,10 +56,10 @@ public class DriverServiceimpl implements DriverService {
     }
 
     @Override
-    public int setBusPosition(int busID, String position) {
+    public int setBusPosition(int busID, String lat, String lng) {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
         String time = df.format(new Date());
-        return driverMapper.setBusPosition(busID, position, time);
+        return driverMapper.setBusPosition(busID, lat, lng, time);
     }
 
 }

@@ -27,8 +27,8 @@ public interface DriverMapper {
     public int setTerminalIndex(@Param("busID") int busID, @Param("isDepart") int isDepart, @Param("currentStopIndex") int currentStopIndex, @Param("currentStopTime") String currentStopTime);
 
     // 更新司机实时坐标
-    @Update("UPDATE bus SET position = #{position} ,currentPositionTime = #{currentPositionTime} WHERE busID = #{busID}")
-    public int setBusPosition(@Param("busID") int busID, @Param("position") String position, @Param("currentPositionTime") String cpTime);
+    @Update("UPDATE bus SET lat = #{lat} , lng = #{lng}, currentPositionTime = #{currentPositionTime} WHERE busID = #{busID}")
+    public int setBusPosition(@Param("busID") int busID, @Param("lat") String lat, @Param("lng") String lng, @Param("currentPositionTime") String cpTime);
 
     // 设置司机用户名
     @Update("UPDATE driver SET driverName = #{driverName} WHERE driverTelephone = #{telephone}")
@@ -51,4 +51,6 @@ public interface DriverMapper {
 
     @Update("UPDATE driver set busID=#{busID} where dirverAccount=#{driverAccount}")
     public int setBusIDOfDriver(@Param("busID") int busID, @Param("driverAccount") String driverAccount);
+
+
 }

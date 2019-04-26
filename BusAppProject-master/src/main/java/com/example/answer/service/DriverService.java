@@ -16,5 +16,5 @@ public interface DriverService {
     public int setTerminalIndex(int busID, int currentIndex);
 
     // 更新司机坐标
-    public int setBusPosition(int busID, String position);
+    public int setBusPosition(int busID, String lat, String lng);
 }

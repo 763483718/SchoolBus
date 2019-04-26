@@ -108,12 +108,18 @@ public class DriverController {
             @RequestParam(value = "lng", required = true) String lng
     )throws ServletException{
         JsonResult r = new JsonResult();
-        try{
-            System.out.println(lat+"   "+lng);
-            r.setStatus("0");
-            r.setMsg("设置坐标成功");
-        }catch (Exception e){
-
+        try {
+            if (driverService.setBusPosition(1, lat, lng) == 0) {
+                r.setStatus("-1100");
+                r.setMsg("设置错误");
+            } else {
+                r.setStatus("0");
+                r.setMsg("设置站点成功");
+            }
+        } catch (Exception e) {
+            r.setResult(e.getClass().getName() + ":" + e.getMessage());
+            r.setStatus("-1000");
+            e.printStackTrace();
         }
         return ResponseEntity.ok(r);
     }
@@ -199,7 +205,7 @@ public class DriverController {
             throws ServletException {
         JsonResult r = new JsonResult();
         try {
-            if (driverService.setBusPosition(busID, position) == 0) {
+            if (driverService.setBusPosition(busID, "0","0") == 0) {
                 r.setStatus("-1100");
                 r.setMsg("设置错误");
             } else {
